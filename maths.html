@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Maths Adventure</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(to bottom,#93c5fd,#dbeafe);
+    text-align:center;
+    padding:20px;
+    margin:0;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+h1{
+    color:#1e3a8a;
+    margin-bottom:10px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+    margin-top:20px;
+}
+
+#question{
+    font-size:2rem;
+    font-weight:bold;
+    margin:25px 0;
+}
+
+.answer{
+    width:100%;
+    padding:18px;
+    margin:10px 0;
+    border:none;
+    border-radius:15px;
+    font-size:1.5rem;
+    background:#60a5fa;
+    color:white;
+    cursor:pointer;
+}
+
+.answer:hover{
+    background:#3b82f6;
+}
+
+.progress{
+    font-size:1.2rem;
+    color:#334155;
+}
+
+.score{
+    font-size:1.2rem;
+    margin-top:10px;
+}
+
+.feedback{
+    font-size:1.4rem;
+    margin-top:20px;
+    min-height:40px;
+}
+
+.reward{
+    font-size:2rem;
+    margin-top:20px;
+}
+
+.restart{
+    margin-top:20px;
+    padding:15px 30px;
+    font-size:1.2rem;
+    border:none;
+    border-radius:15px;
+    background:#22c55e;
+    color:white;
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔢 Maths Adventure</h1>
+
+<div class="card">
+
+<div class="progress" id="progress">
+Question 1 of 20
+</div>
+
+<div class="score" id="score">
+⭐ Score: 0
+</div>
+
+<div id="question"></div>
+
+<div id="answers"></div>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="reward" id="reward"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const TOTAL_QUESTIONS = 20;
+
+let currentQuestion = 0;
+let score = 0;
+let correctAnswer = 0;
+
+function random(max){
+    return Math.floor(Math.random() * max);
+}
+
+function generateQuestion(){
+
+    let type = random(5);
+
+    if(type === 0){
+        let a = random(11);
+        let b = random(11);
+
+        correctAnswer = a + b;
+
+        return `${a} + ${b} = ?`;
+    }
+
+    if(type === 1){
+        let a = random(11);
+        let b = random(11);
+
+        let total = a + b;
+
+        correctAnswer = b;
+
+        return `${a} + □ = ${total}`;
+    }
+
+    if(type === 2){
+        let total = 10 + random(11);
+        let take = random(total);
+
+        correctAnswer = total - take;
+
+        return `${total} - ${take} = ?`;
+    }
+
+    if(type === 3){
+        let start = random(8);
+
+        correctAnswer = (start + 1) * 2;
+
+        return `Count in 2s: ${start*2}, ?, ${correctAnswer+2}`;
+    }
+
+    let first = random(20);
+    let second = random(20);
+
+    correctAnswer = Math.max(first,second);
+
+    return `Which number is bigger? ${first} or ${second}`;
+}
+
+function buildAnswers(correct){
+
+    const answers = [correct];
+
+    while(answers.length < 3){
+
+        let option = correct + (random(7)-3);
+
+        if(option < 0){
+            continue;
+        }
+
+        if(!answers.includes(option)){
+            answers.push(option);
+        }
+    }
+
+    return answers.sort(() => Math.random() - 0.5);
+}
+
+function showQuestion(){
+
+    if(currentQuestion >= TOTAL_QUESTIONS){
+        showResults();
+        return;
+    }
+
+    document.getElementById("progress").innerText =
+        `Question ${currentQuestion+1} of ${TOTAL_QUESTIONS}`;
+
+    document.getElementById("score").innerText =
+        `⭐ Score: ${score}`;
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("reward").innerText = "";
+
+    const question = generateQuestion();
+
+    document.getElementById("question").innerText =
+        question;
+
+    const answersDiv =
+        document.getElementById("answers");
+
+    answersDiv.innerHTML = "";
+
+    const options =
+        buildAnswers(correctAnswer);
+
+    options.forEach(option => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "answer";
+
+        button.innerText = option;
+
+        button.onclick = () => checkAnswer(option);
+
+        answersDiv.appendChild(button);
+    });
+}
+
+function checkAnswer(answer){
+
+    const feedback =
+        document.getElementById("feedback");
+
+    if(answer === correctAnswer){
+
+        score++;
+
+        feedback.innerText =
+            "✅ Brilliant!";
+    }
+    else{
+
+        feedback.innerText =
+            `❌ Correct answer: ${correctAnswer}`;
+    }
+
+    if(score === 5){
+        document.getElementById("reward").innerText =
+            "🏅 Sticker Unlocked!";
+    }
+
+    if(score === 10){
+        document.getElementById("reward").innerText =
+            "🦄 Unicorn Friend Unlocked!";
+    }
+
+    if(score === 15){
+        document.getElementById("reward").innerText =
+            "🌈 Rainbow Castle Unlocked!";
+    }
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        showQuestion();
+
+    },1200);
+}
+
+function showResults(){
+
+    document.getElementById("question").innerHTML =
+        `🏆 Finished!`;
+
+    document.getElementById("answers").innerHTML =
+        "";
+
+    let stars = "⭐";
+
+    if(score >= 18){
+        stars = "⭐⭐⭐⭐⭐";
+    }
+    else if(score >= 14){
+        stars = "⭐⭐⭐⭐";
+    }
+    else if(score >= 10){
+        stars = "⭐⭐⭐";
+    }
+
+    document.getElementById("feedback").innerHTML =
+        `<h2>${score} / ${TOTAL_QUESTIONS}</h2>
+         <h1>${stars}</h1>`;
+
+    document.getElementById("reward").innerHTML =
+        `<button class="restart" onclick="restartQuiz()">
+        Play Again
+        </button>`;
+}
+
+function restartQuiz(){
+
+    score = 0;
+    currentQuestion = 0;
+
+    showQuestion();
+}
+
+showQuestion();
+
+</script>
+
+</body>
+</html>
