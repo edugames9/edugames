@@ -1,1 +1,23 @@
-<!doctype html><html><head><link rel="stylesheet" href="style.css"></head><body><h1>🔢 Maths</h1><button onclick="start('easy')">Easy</button><button onclick="start('tricky')">Tricky</button><button onclick="start('mixed')">Mixed</button><h2 id=q></h2><div id=a></div><script>let correct=0,score=0;function r(n){return Math.floor(Math.random()*n)}function sticker(s){let x=JSON.parse(localStorage.stickers||'[]');if(!x.includes(s)){x.push(s);localStorage.stickers=JSON.stringify(x)}}function start(m){let aa=0,bb=0;if(m==='easy'){aa=r(20);bb=r(20-aa);correct=aa+bb;q.innerText=`${aa}+${bb}`;}else{aa=r(12)+1;bb=r(12)+1;correct=aa*bb;q.innerText=`${aa}×${bb}`;}a.innerHTML='';[correct,correct+1,Math.max(0,correct-1)].forEach(v=>{let b=document.createElement('button');b.innerText=v;b.onclick=()=>{if(v===correct){score++;localStorage.mathsCorrect=(+localStorage.mathsCorrect||0)+1;if(score===5)sticker('🦄')}start(m)};a.appendChild(b);});}start('easy');</script></body></html>
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Maths Adventure V2</title>
+<style>body{font-family:Arial;background:#f5d0fe;padding:20px;text-align:center}.card{background:white;max-width:800px;margin:auto;padding:20px;border-radius:20px}button{padding:14px;margin:8px;border-radius:12px;border:none;background:#8b5cf6;color:white;font-size:18px}.ans{display:block;width:100%;max-width:400px;margin:8px auto}</style></head>
+<body><div class="card"><h1>🦄 Maths Adventure</h1><div id="start"><button onclick="begin('easy')">Easy</button><button onclick="begin('tricky')">Tricky</button><button onclick="begin('mixed')">Mixed</button></div><h2 id="progress"></h2><h2 id="q"></h2><div id="answers"></div><div id="feedback"></div></div>
+<script>
+let mode='easy',num=0,score=0,correct=0,total=20;
+function r(n){return Math.floor(Math.random()*n)}
+function award(s){let a=JSON.parse(localStorage.getItem('stickers')||'[]');if(!a.includes(s)){a.push(s);localStorage.setItem('stickers',JSON.stringify(a));}}
+function begin(m){mode=m;num=0;score=0;nextQ();}
+function gen(){let t;if(mode==='easy'){t=r(5);} else if(mode==='tricky'){t=5+r(4);} else {t=r(9);} 
+if(t===0){let a=r(20),b=r(21-a);correct=a+b;return `${a} + ${b} = ?`;}
+if(t===1){let a=10+r(10),b=r(a);correct=a-b;return `${a} - ${b} = ?`;}
+if(t===2){correct=r(10); return `${correct} + □ = ${correct*2}`;}
+if(t===3){let a=r(20),b=r(20);correct=Math.max(a,b);return `Which is bigger: ${a} or ${b}?`;}
+if(t===4){correct=(r(10)+1)*2;return `Count in 2s: ${correct-2}, ?, ${correct+2}`;}
+if(t===5){let a=r(90)+10,b=r(10)+1;correct=a+b;return `${a} + ${b} = ?`;}
+if(t===6){let a=r(100),b=r(50);correct=a-b;return `${a} - ${b} = ?`;}
+if(t===7){let n=r(12)+1;correct=n*5;return `5 × ${n} = ?`;}
+let p1=(r(5)+1)*10,p2=(r(5)+1)*10;correct=(p1+p2)/10;return `${p1}p + ${p2}p = ? (p)`;}
+function nextQ(){if(num>=total){finish();return;}progress.innerText=`Question ${num+1} of ${total} | Score ${score}`;q.innerText=gen();answers.innerHTML='';feedback.innerHTML='';let opts=[correct];while(opts.length<4){let v=Math.max(0,correct+r(15)-7);if(!opts.includes(v))opts.push(v);}opts.sort(()=>Math.random()-.5);opts.forEach(o=>{let b=document.createElement('button');b.className='ans';b.innerText=o;b.onclick=()=>answer(o);answers.appendChild(b);});}
+function answer(v){if(v===correct){score++;localStorage.mathsCorrect=(+localStorage.mathsCorrect||0)+1;if(score===5)award('🦄');if(score===10)award('🌈');if(score===15)award('✨');if(score===20)award('👑');feedback.innerText='✅ Brilliant!';}else{feedback.innerText='❌';}num++;setTimeout(nextQ,700);}
+function finish(){let best=Math.max(score,(+localStorage.bestScore||0));localStorage.bestScore=best;localStorage.mathsGamesPlayed=(+localStorage.mathsGamesPlayed||0)+1;let stars=score>=18?'⭐⭐⭐⭐⭐':score>=14?'⭐⭐⭐⭐':'⭐⭐⭐';q.innerHTML='🏆 Quiz Complete';answers.innerHTML='';progress.innerHTML=`Score ${score}/20<br>${stars}<br>Best Score: ${best}`;}
+</script></body></html>
