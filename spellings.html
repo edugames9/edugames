@@ -1,1 +1,24 @@
-<!doctype html><html><head><link rel="stylesheet" href="style.css"></head><body><h1>📝 Weekly Spellings</h1><p>Update only data/week-current.json weekly</p><div id=app>Loading...</div><script>fetch('data/week-current.json').then(r=>r.json()).then(d=>{let h='<h2>'+d.title+'</h2>';d.words.forEach(w=>{h+=`<p>${w}<br><input id="${w}"><button onclick="checkWord('${w}')">Check</button></p>`});app.innerHTML=h;window.checkWord=function(w){let ok=document.getElementById(w).value.toLowerCase()===w.toLowerCase();if(ok){localStorage.spellingCorrect=(+localStorage.spellingCorrect||0)+1;alert('✅ Correct')}else{alert('❌ Try Again')}}})</script></body></html>
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weekly Spellings</title>
+<style>body{font-family:Arial;background:#f3e8ff;padding:20px;text-align:center}.card{background:white;max-width:900px;margin:auto;padding:20px;border-radius:20px}input{padding:10px;margin:5px}button{padding:10px 14px;margin:5px}.section{margin-top:25px}</style></head>
+<body><div class="card"><h1>📝 Weekly Spellings</h1><div id="content">Loading...</div></div>
+<script>
+let words=[];
+function award(st){let s=JSON.parse(localStorage.getItem('stickers')||'[]');if(!s.includes(st)){s.push(st);localStorage.setItem('stickers',JSON.stringify(s));}}
+function addResult(correct){localStorage.spellingAttempts=(+localStorage.spellingAttempts||0)+1;if(correct){localStorage.spellingCorrect=(+localStorage.spellingCorrect||0)+1;award('✏️');}}
+fetch('data/week-current.json').then(r=>r.json()).then(data=>{
+words=data.words;let h=`<h2>${data.title}</h2>`;
+h+='<div class="section"><h3>Picture Labelling</h3><img src="images/week-current-blank.jpg" style="max-width:100%"><br>';
+words.forEach((w,i)=>h+=`Label ${i+1}: <input id="lab${i}"><br>`);
+h+='<button onclick="checkLabels()">Check Answers</button></div>';
+
+h+='<div class="section"><h3>Type The Word</h3><select id="wordPick">'+words.map(w=>`<option>${w}</option>`).join('')+'</select><br><input id="wordAnswer"><button onclick="checkWord()">Check</button></div>';
+
+h+='<div class="section"><h3>Missing Letters</h3><div id="missing"></div><input id="missingAnswer"><button onclick="checkMissing()">Check</button></div><div id="result"></div>';
+content.innerHTML=h;setupMissing();});
+function checkLabels(){let score=0;words.forEach((w,i)=>{if(document.getElementById('lab'+i).value.toLowerCase()===w.toLowerCase())score++;});addResult(score===words.length);result.innerHTML=`Labels: ${score}/${words.length}`;if(score===words.length) award('📚');}
+function checkWord(){let w=document.getElementById('wordPick').value;let ok=document.getElementById('wordAnswer').value.toLowerCase()===w.toLowerCase();addResult(ok);result.innerHTML=ok?'✅ Correct':'❌ Try again';}
+let currentWord='';
+function setupMissing(){currentWord=words[Math.floor(Math.random()*words.length)];let hidden=currentWord.slice(0,2)+'__'+currentWord.slice(4);document.getElementById('missing').innerText=hidden;}
+function checkMissing(){let expected=currentWord.substring(2,4);let ok=document.getElementById('missingAnswer').value.toLowerCase()===expected.toLowerCase();addResult(ok);result.innerHTML=ok?'✅ Correct':'❌ Missing letters were '+expected;}
+</script></body></html>

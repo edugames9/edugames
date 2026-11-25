@@ -1,1 +1,4 @@
-<!doctype html><html><head><link rel="stylesheet" href="style.css"></head><body><h1>📈 Progress</h1><p>Maths correct: <span id=m></span></p><p>Spellings correct: <span id=s></span></p><script>m.innerText=localStorage.mathsCorrect||0;s.innerText=localStorage.spellingCorrect||0;</script></body></html>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="font-family:Arial;text-align:center"><h1>📈 Progress</h1><div id="stats"></div><script>
+const maths=localStorage.mathsCorrect||0;const spell=localStorage.spellingCorrect||0;const attempts=localStorage.spellingAttempts||0;const best=localStorage.bestScore||0;const games=localStorage.mathsGamesPlayed||0;const acc=attempts?Math.round(spell/attempts*100):0;
+document.getElementById('stats').innerHTML=`<p>Maths Questions Correct: ${maths}</p><p>Maths Games Played: ${games}</p><p>Best Maths Score: ${best}/20</p><hr><p>Spelling Words Correct: ${spell}</p><p>Spelling Attempts: ${attempts}</p><p>Spelling Accuracy: ${acc}%</p>`;
+</script></body></html>
