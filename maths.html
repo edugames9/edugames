@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Maths Adventure V2</title>
 <style>body{font-family:Arial;background:#f5d0fe;padding:20px;text-align:center}.card{background:white;max-width:800px;margin:auto;padding:20px;border-radius:20px}button{padding:14px;margin:8px;border-radius:12px;border:none;background:#8b5cf6;color:white;font-size:18px}.ans{display:block;width:100%;max-width:400px;margin:8px auto}</style></head>
-<body><div class="card"><h1>🦄 Maths Adventure</h1><div id="start"><button onclick="begin('easy')">Easy</button><button onclick="begin('tricky')">Tricky</button><button onclick="begin('mixed')">Mixed</button></div><h2 id="progress"></h2><h2 id="q"></h2><div id="answers"></div><div id="feedback"></div></div>
+<body>
+<div style="margin-bottom:20px;">
+
+<a href="index.html"
+   style="
+   display:inline-block;
+   background:#8b5cf6;
+   color:white;
+   padding:12px 24px;
+   border-radius:12px;
+   text-decoration:none;
+   font-size:20px;
+   font-weight:bold;
+   ">
+
+🏠 Home
+
+</a>
+
+</div>  
+  <div class="card"><h1>🦄 Maths Adventure</h1><div id="start"><button onclick="begin('easy')">Easy</button><button onclick="begin('tricky')">Tricky</button><button onclick="begin('mixed')">Mixed</button></div><h2 id="progress"></h2><h2 id="q"></h2><div id="answers"></div><div id="feedback"></div></div>
 <script>
 let mode='easy',num=0,score=0,correct=0,total=20;
 function r(n){return Math.floor(Math.random()*n)}
