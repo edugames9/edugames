@@ -1,208 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
 
 <title>Weekly Spellings</title>
 
 <style>
 
 body{
-    font-family:Arial,sans-serif;
+
+    font-family:
+        "Comic Sans MS",
+        "Trebuchet MS",
+        sans-serif;
+
     background:#f3e8ff;
+
     margin:0;
+
     padding:20px;
+
     text-align:center;
 }
 
-.card{
-    background:white;
-    max-width:900px;
-    margin:auto;
-    padding:20px;
-    border-radius:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
+.home{
 
-.button{
+    display:inline-block;
+
     background:#8b5cf6;
+
     color:white;
-    border:none;
-    border-radius:14px;
-    padding:14px 20px;
-    margin:8px;
-    font-size:18px;
-}
 
-.button:hover{
-    background:#7c3aed;
-}
+    text-decoration:none;
 
-img{
-    max-width:100%;
+    padding:12px 20px;
+
     border-radius:12px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
 }
 
-.hidden{
-    display:none;
+.card{
+
+    background:white;
+
+    max-width:900px;
+
+    margin:auto;
+
+    border-radius:20px;
+
+    padding:20px;
+}
+
+.sheetButton{
+
+    display:block;
+
+    width:100%;
+
+    max-width:500px;
+
+    margin:10px auto;
+
+    padding:20px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:#ec4899;
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:bold;
+}
+
+.actionButton{
+
+    display:block;
+
+    width:100%;
+
+    max-width:450px;
+
+    margin:10px auto;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#8b5cf6;
+
+    color:white;
+
+    font-size:22px;
+}
+
+.backButton{
+
+    display:block;
+
+    width:100%;
+
+    max-width:250px;
+
+    margin:20px auto;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#64748b;
+
+    color:white;
+
+    font-size:18px;
 }
 
 input{
+
     width:90%;
-    max-width:400px;
+
+    max-width:500px;
+
     padding:12px;
+
+    font-size:20px;
+
     margin:8px;
-    font-size:18px;
 }
 
-.instructions{
-    background:#ede9fe;
-    padding:15px;
-    border-radius:10px;
-    margin-top:20px;
+img{
+
+    max-width:100%;
+
+    border-radius:15px;
+}
+
+h1{
+
+    color:#7c3aed;
+
+    font-size:48px;
 }
 
 </style>
+
 </head>
 
 <body>
-<div style="margin-bottom:20px;">
 
-<a href="index.html"
-   style="
-   display:inline-block;
-   background:#8b5cf6;
-   color:white;
-   padding:12px 24px;
-   border-radius:12px;
-   text-decoration:none;
-   font-size:20px;
-   font-weight:bold;
-   ">
-
+<a href="index.html" class="home">
 🏠 Home
-
 </a>
 
-</div>
-    
 <div class="card">
+
+<div id="menu">
 
 <h1>📝 Weekly Spellings</h1>
 
-<button class="button" onclick="showLabelled()">
-👀 View Labelled Sheet
+<button class="sheetButton"
+onclick="showSheetMenu(1)">
+📚 Worksheet 1
 </button>
 
-<button class="button" onclick="showBlank()">
-✏️ Complete Blank Sheet
+<button class="sheetButton"
+onclick="showSheetMenu(2)">
+📚 Worksheet 2
 </button>
 
-<div id="viewer"></div>
+<button class="sheetButton"
+onclick="showSheetMenu(3)">
+📚 Worksheet 3
+</button>
+
+</div>
+
+<div id="content"
+     style="display:none;">
+</div>
 
 </div>
 
 <script>
 
-function showLabelled(){
+var currentSheet = 1;
 
-document.getElementById("viewer").innerHTML = `
+function showSheetMenu(sheet){
 
-<h2>Labelled Sheet</h2>
+    currentSheet = sheet;
 
-<img src="images/week-current-labelled.jpg"
-alt="Labelled spelling sheet">
+    document.getElementById("menu")
+        .style.display = "none";
 
-`;
+    document.getElementById("content")
+        .style.display = "block";
 
+    document.getElementById("content")
+        .innerHTML =
+
+    '<h1>📚 Worksheet '+sheet+'</h1>'
+
+    +
+
+    '<button class="actionButton" onclick="showAnswers()">'
+
+    +'📖 Study Sheet'
+
+    +'</button>'
+
+    +
+
+    '<button class="actionButton" onclick="showWorksheet()">'
+
+    +'✏️ Complete Worksheet'
+
+    +'</button>'
+
+    +
+
+    '<button class="backButton" onclick="goHome()">'
+
+    +'⬅ Back'
+
+    +'</button>';
 }
 
-function showBlank(){
+function showAnswers(){
 
-document.getElementById("viewer").innerHTML = `
+    document.getElementById("content")
+        .innerHTML =
 
-<div id="worksheet">
+    '<h1>📖 Study Sheet</h1>'
 
-<h2>Complete Your Spellings</h2>
+    +
 
-<img src="images/week-current-blank.jpg"
-alt="Blank spelling sheet">
+    '<img src="images/sheet'
 
-<br><br>
+    +currentSheet+
 
-<input placeholder="Word 1">
+    '-labelled.jpg">'
 
-<br>
+    +
 
-<input placeholder="Word 2">
+    '<button class="backButton" onclick="showSheetMenu('
 
-<br>
+    +currentSheet+
 
-<input placeholder="Word 3">
-
-<br>
-
-<input placeholder="Word 4">
-
-<br>
-
-<input placeholder="Word 5">
-
-<br>
-
-<input placeholder="Word 6">
-
-<br>
-
-<input placeholder="Word 7">
-
-<br>
-
-<input placeholder="Word 8">
-
-<br><br>
-
-<button class="button"
-onclick="saveWork()">
-💾 Save My Work
-</button>
-
-<div class="instructions">
-
-<h3>📱 Saving on iPad</h3>
-
-<p>
-Tap "Save My Work" and follow the instructions.
-</p>
-
-</div>
-
-</div>
-
-`;
-
+    ')">⬅ Back</button>';
 }
 
-function saveWork(){
+function showWorksheet(){
 
-alert(
+    document.getElementById("content")
+        .innerHTML =
 
-"To save your work on an iPad:\\n\\n" +
+    '<h1>✏️ Complete Worksheet</h1>'
 
-"1. Fill in your spellings\\n" +
+    +
 
-"2. Take a screenshot\\n" +
+    '<img src="images/sheet'
 
-"(Top Button + Volume Up)\\n\\n" +
+    +currentSheet+
 
-"3. The image will be saved to Photos."
+    '-blank.jpg">'
 
-);
+    +
 
+    '<br><br>'
+
+    +
+
+    '<input placeholder="Spelling 1">'
+
+    +
+
+    '<input placeholder="Spelling 2">'
+
+    +
+
+    '<input placeholder="Spelling 3">'
+
+    +
+
+    '<input placeholder="Spelling 4">'
+
+    +
+
+    '<input placeholder="Spelling 5">'
+
+    +
+
+    '<input placeholder="Spelling 6">'
+
+    +
+
+    '<input placeholder="Spelling 7">'
+
+    +
+
+    '<input placeholder="Spelling 8">'
+
+    +
+
+    '<button class="backButton" onclick="showSheetMenu('
+
+    +currentSheet+
+
+    ')">⬅ Back</button>';
+}
+
+function goHome(){
+
+    document.getElementById("content")
+        .style.display = "none";
+
+    document.getElementById("menu")
+        .style.display = "block";
 }
 
 </script>
 
 </body>
+
 </html>
